@@ -10,7 +10,7 @@
 <pre>&lt;script src=&quot;path/to/do-async.js&quot;&gt;&lt;/script&gt;</pre>
 
 <h3>Node</h3>
-<p>Coming Soon...</p>
+<p>npm install do-async</p>
 
 <h2>Usage:</h2>
 
