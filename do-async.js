@@ -10,7 +10,7 @@
 		var inChainContext = {};
 		
 		inChainContext.pass = function(){
-			instaThen = true; // allow future .then() calls to immediately trigger it's callback
+			
 			var recieved = Array.prototype.slice.call(arguments); // extract data to be passed 
 			
 			// if there's another link in the chain ready to go
@@ -22,6 +22,7 @@
 			}
 			// there is no other functions 
 			else{
+				instaThen = true; 
 				passingVars = recieved; // save extracted vars for the next then call
 			}
 		}
@@ -31,15 +32,14 @@
 		}
 		
 		chainer.then = function(additionalChainLink){
+			callbackChainLinks.push(additionalChainLink);
+			
 			if (instaThen){
-				additionalChainLink.apply(inChainContext, passingVars);
 				instaThen = false;
 				currentChainIndex ++;
-				passingVars = [];
+				additionalChainLink.apply(inChainContext, passingVars);
 			}
-			else{
-				callbackChainLinks.push(additionalChainLink);
-			}
+			
 			return chainer;
 		}
 		
