@@ -1,0 +1,24 @@
+{
+  "name": "do-async",
+  "version": "0.0.1",
+  "description": "Wrapper for serial ssynchronous functions",
+  "main": "do-async.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/muggy8/do-async.git"
+  },
+  "keywords": [
+    "Async",
+    "Asynchonous",
+    "Serial"
+  ],
+  "author": "Muggy Ate <muggy8@gmail.com> (https://github.com/muggy8)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/muggy8/do-async/issues"
+  },
+  "homepage": "https://github.com/muggy8/do-async#readme"
+}
