@@ -51,11 +51,3 @@
 	// export to node if we're in node
 	if (typeof module != 'undefined' && module.exports) {module.exports = context["doAsync"];} 
 })(this)
-
-/* target api
-doAsync(()=>{...})
-	.then((val)=>{...})
-	.then((val)=>{...})
-	.then((val)=>{...})
-	.then((val)=>{...})
-*/
