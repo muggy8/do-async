@@ -31,7 +31,7 @@
 		
 		chainer.then = function(additionalChainLink){
 			if (instaThen){
-				additionalChainLink.apply(chainer, recieved);
+				additionalChainLink.apply(chainer, passingVars);
 				instaThen = false;
 				currentChainIndex ++;
 				passingVars = [];
