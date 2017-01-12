@@ -16,9 +16,9 @@
 			// if there's another link in the chain ready to go
 			if (callbackChainLinks.length > currentChainIndex){
 				passingVars = []; // clear the passing vars
-				callbackChainLinks[currentChainIndex].apply(inChainContext, recieved); //call the next chain with our recieved values.
 				instaThen = false; // disally then from immediately firing upon call
 				currentChainIndex ++; // increment chain counter for when this function gets called again
+				callbackChainLinks[currentChainIndex-1].apply(inChainContext, recieved); //call the next chain with our recieved values.
 			}
 			// there is no other functions 
 			else{
