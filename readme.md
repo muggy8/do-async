@@ -53,7 +53,7 @@ doAsync(function(){
 <h4>this.end()</h4>
 <p>the end function is similar to the pass function in that you shouldn't put any code under it. When called, it will terminate the chain of calls. It takes no arguments.</p>
 
-<h3>Error Handeling<h3>
+<h3>Error Handeling</h3>
 <p>Although the general structure looks kind of like a Promise chain, there's a few key differences between this and a Promise chain. First off if a blocking error happens, nothing is going to save it from throwing the error and terminating. This means that you must handle all of your errors within the callback itself. However this also means that if you encounter an error and you would like to terminate the execution chain then you can do that within the catch part of a try-catch block</p>
 
 <h2>Licencing</h2>
