@@ -6,4 +6,7 @@
 <h3>Browser</h3>
 
 <p>put this somewhere in your document</p>
-<pre><script src="path/to/do-async.js"></script></pre>
+<pre>&lt;script src=&quot;path/to/do-async.js&quot;&gt;&lt;/script&gt;</pre>
+
+<h3>Node</h3>
+<p>Coming Soon...</p>
