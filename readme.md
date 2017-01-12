@@ -15,7 +15,7 @@
 <h2>Usage:</h2>
 
 <h3>Basic Structure</h3>
-Assuming you have already done either <pre>const doAsync = require('do-async');</pre> or <pre>&lt;script src=&quot;path/to/do-async.js&quot;&gt;&lt;/script&gt;</pre>
+<p>Assuming you have already done either <pre>const doAsync = require('do-async');</pre> or <pre>&lt;script src=&quot;path/to/do-async.js&quot;&gt;&lt;/script&gt;</pre> You can then do:</p>
 
 <pre>
 doAsync(function(){
