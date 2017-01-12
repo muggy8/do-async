@@ -25,10 +25,14 @@
 				instaThen = true; 
 				passingVars = recieved; // save extracted vars for the next then call
 			}
+			
 		}
 		inChainContext.end = function(){
 			instaThen = false;
 			callbackChainLinks = [];
+			chainer.then = function(){
+				return chainer;
+			}
 		}
 		
 		chainer.then = function(additionalChainLink){
