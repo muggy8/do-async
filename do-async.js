@@ -1,14 +1,26 @@
 "use strict";
 (function(context){
 	
-	context["doAsync"] = function(chainStart, chainName){
+	context["doAsync"] = function(chainStartOrName, actualChain){
+		var chainStart, chainName;
+		if (typeof chainStartOrName === "string"){
+			chainName = chainStartOrName;
+			chainStart = actualChain;
+		}
+		else if (typeof chainStartOrName === "function"){
+			chainStart = chainStartOrName;
+		}
+		else {
+			throw "type missmatch";
+		}
+		
 		
 		// setting up the execution array-like
 		var executionChain = {length:0};
 		
 		// setting up a psudo push function for the array-like 
-		executionChain.addLink = function(callbackOrName, callbackForReal){
-			var callback, callbackName;
+		executionChain.addLink = function(callback, callbackName){
+			/*var callback, callbackName;
 			if (typeof callbackOrName === "string" || typeof callbackOrName === "undefined"){
 				callbackName = callbackOrName;
 				callback = callbackForReal;
@@ -18,7 +30,7 @@
 			}
 			else {
 				throw "type missmatch";
-			}
+			}*/
 			
 			// keep a copy of the current index for the reference of the duration of the function
 			var executionIndex = executionChain.length;
@@ -28,6 +40,7 @@
 			executionChain[executionIndex] = {exe:callback, applyContext:{}, passQueue:[]};
 			
 			// if a name exists, put a reference to the callback to the name as well
+			console.log(callbackName);
 			if (callbackName){
 				executionChain[callbackName] = executionChain[executionIndex];
 			}
