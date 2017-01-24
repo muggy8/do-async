@@ -132,7 +132,7 @@ doAsync(function(){
 <p>The above example is a bit convoluted and if you wanted to add segments to your narrative, it becomes a bit hard as you would have to re-structre your jumps every time you add another narrative branch. But that's why you can name your segments and use... </p>
 
 <h4>this.jumpTo(target)||this.jumpto(target)</h4>
-<p>I decided that havinga jumpto and jumpTo makes it easier for people to forget about the the proper function name and still use it. They are identicle to each other in function (reference the same method actually) and will return a callback to the jump target. You can use it in conjunction with naming your segments above and modify your narrative this way</p>
+<p>I decided that having jumpto and jumpTo because I cant decide which one is more correct. They are identicle to each other in function (reference the same method actually) and will return a callback to the jump target. You can use it in conjunction with naming your segments above and modify your narrative this way</p>
 
 <pre>
 	var narrative = doAsync(function(){
