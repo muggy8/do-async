@@ -145,9 +145,9 @@
 		}
 		
 		// for debugging
-		chainer.getChain = function(name){
-			return executionChain;
-		}
+		//chainer.getChain = function(name){
+		//	return executionChain;
+		//}
 		
 		// enviroment set up add the first object to the chain.
 		chainer.then(chainName, chainStart);
