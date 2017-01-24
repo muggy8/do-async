@@ -30,6 +30,10 @@
 				}, 500)
 			}).then(function(sum){
 				console.log(sum);
+				var jump = this.jump;
+				setTimeout(function(){
+					jump(-1)(sum)
+				}, 500)
 			})
 		</script>
 	</body>
