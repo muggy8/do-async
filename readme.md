@@ -63,7 +63,7 @@ doAsync(function(){
 <p>The .then() function takes 1 callback function and optionally one string before the callback to identify the function in the chain. it exposes to the callback's "this" property the api to interact with the chain when it calls the callback. If you are going to be calling the chain interaction api you will most likely want to set a reference to them (or the "this" object) so you can call them within your own callbacks later. you can chain these .then calls.</p>
 
 <h4>this.pass()</h4>
-<p>the pass function is what tells the wrapper that your code has completed and that you are going to proceed to the next chunk of code. You can call this multiple times throughout your function and will whatever is the next callback provide by the next .then call in the chain. You can pass any number of arguements to the pass function which will get passed to the next callback in line.</p>
+<p>the pass function is what tells the wrapper that your code has completed and that you are going to proceed to the next chunk of code. You can call this multiple times throughout your function whixch will begin executing whatever is the next callback provide by the next .then call in the chain. You can pass any number of arguements to the pass function which will get passed to the next callback in line.</p>
 
 <h4>this.end() || this.destroy()</h4>
 <p>The end or destroy function are alius for each other and will perform the same function. this is an emergency abort function which will erase the whole chain and make it so that you cannot add more function onto it with the then function. in most cases, you do not need to call this function ever. </p>
@@ -132,7 +132,7 @@ doAsync(function(){
 
 <p>The above example is a bit convoluted and if you wanted to add segments to your narrative, it becomes a bit hard as you would have to re-structre your jumps every time you add another narrative branch. But that's why you can name your segments and use... </p>
 
-<h4>this.jumpTo(target)||this.jumpto(target)</h4>
+<h4>this.jumpTo(target) || this.jumpto(target)</h4>
 <p>I decided that having jumpto and jumpTo because I cant decide which one is more correct. They are identicle to each other in function (reference the same method actually) and will return a callback to the jump target. You can use it in conjunction with naming your segments above and modify your narrative this way</p>
 
 <pre>
