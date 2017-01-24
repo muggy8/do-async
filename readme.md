@@ -58,8 +58,8 @@ doAsync(function(){
 	app.get("/*", findIfLibUpdated)
 </pre>
 
-<h3>.then(callback [, linkName])</h3>
-<p>The .then() function takes 1 callback function and optionally one string to identify the function in the chain. it exposes to the callback's "this" property the api to interact with the chain when it calls the callback. If you are going to be calling the chain interaction api you will most likely want to set a reference to them (or the this property) so you can call them within your own callbacks later. you can chain these .then calls.</p>
+<h3>.then([linkName, ]callback)</h3>
+<p>The .then() function takes 1 callback function and optionally one string before the callback to identify the function in the chain. it exposes to the callback's "this" property the api to interact with the chain when it calls the callback. If you are going to be calling the chain interaction api you will most likely want to set a reference to them (or the "this" object) so you can call them within your own callbacks later. you can chain these .then calls.</p>
 
 <h4>this.pass()</h4>
 <p>the pass function is what tells the wrapper that your code has completed and that you are going to proceed to the next chunk of code. You can call this multiple times throughout your function and will whatever is the next callback provide by the next .then call in the chain. You can pass any number of arguements to the pass function which will get passed to the next callback in line.</p>
@@ -68,41 +68,131 @@ doAsync(function(){
 <p>The end or destroy function are alius for each other and will perform the same function. this is an emergency abort function which will erase the whole chain and make it so that you cannot add more function onto it with the then function.</p>
 
 <h4>this.jump(numberToJump)</h4>
-<p>This function jumps by a number. You can jump forwards or backwards in the chain and lets you traverse your async chain freely. This function will return a function that you can use to call the block that you want. You can use this in one of a few ways such as:</p>
+<p>This function jumps by a number. You can jump forwards or backwards in the chain and lets you traverse your async chain freely. This function will return a function that you can use to call the callback block that you want. you jump forwards or backwards in the execution. You can use the jump function in a few creative ways such as:</p>
 <pre>
 	var narrative = doAsync(function(){
-		var adventure = window.confirm("are you willing to go on an adventure?");
-		if (!adventure){
-			// jump 5 thens into the future 
-			this.jump(5)(false);
+		var legends = window.confirm("are you willing to become the warrior of legends?");
+		
+		if (!legends){
+			// skip the next line. 
+			this.pass(["farm", "village", "contenent", "world"]);
+		}
+		
+		else{
+			this.jump(2)();
+		}
+	}).then(function(destroyedItems){
+		alert("Your " + destroyedItems[0]+ " was destroyed by the evil dragon");
+		
+		var followCalling = confirm("are you ready to become the warrior of legends now?");
+		
+		if (followCalling){
+			this.pass()
+		}
+		else if (destroyedItems.length <= 1){
+			this.jump(4)()
 		}
 		else{
-			this.pass(true);
+			this.jump(0)(destroyedItems.slice(1))
 		}
-	}).then(... 
-	
-		...
-	
-	...}).then(... 
-	
-		...
-	
-	...}).then(... 
-	
-		...
-	
-	...}).then(function(hasEquipment){
-				if (hasEquipment){alert("You killed the evil dragon")}
-			}}).then(function(hasEquipment){
 		
-			alert("You have been killed by the evil dragon");
-			var again = window.confirm("are you willing to go on an adventure?");
-			if (again){
-				this.jump(-4)(true);
-			}
+	}).then(function(){
+		
+		alert("you are now training for your encounter with the evil dragon");
+		
+		var pass = this.pass;
+		setTimeout(function(){
+			pass();
+		}, 5000);
+		
+	}).then(function(){
+	
+		this.pass(confirm("armor up?"));
+		
+	}).then(function(hasEquipment){
+	
+		if (hasEquipment){
+			alert("You killed the evil dragon")
+		}
+		else{
+			alert("The evil dragon killed you")
+		}
+		
+	}).then(function(hasEquipment){
+	
+		alert("Game Over");
+		var again = window.confirm("are you willing to go on an adventure?");
+		if (again){
+			this.jump(-3)(true);
+		}
+		
 	})
 </pre>
 
+<p>The above example is a bit convoluted and if you wanted to add segments to your narrative, it becomes a bit hard as you would have to re-structre your jumps every time you add another narrative branch. But that's why you can name your segments and use... </p>
+
+<h4>this.jumpTo(target)||this.jumpto(target)</h4>
+<p>I decided that havinga jumpto and jumpTo makes it easier for people to forget about the the proper function name and still use it. They are identicle to each other in function (reference the same method actually) and will return a callback to the jump target. You can use it in conjunction with naming your segments above and modify your narrative this way</p>
+
+<pre>
+	var narrative = doAsync(function(){
+		var legends = window.confirm("are you willing to become the warrior of legends?");
+		
+		if (!legends){
+			// skip the next line. 
+			this.pass(["farm", "village", "contenent", "world"]);
+		}
+		
+		else{
+			this.jumpTo("training")();
+		}
+	}).then(function(destroyedItems){
+		alert("Your " + destroyedItems[0]+ " was destroyed by the evil dragon");
+		
+		var followCalling = confirm("are you ready to become the warrior of legends now?");
+		
+		if (followCalling){
+			this.pass()
+		}
+		else if (destroyedItems.length <= 1){
+			this.jumpto("gameOver")()
+		}
+		else{
+			this.jump(0)(destroyedItems.slice(1))
+		}
+		
+	}).then("training", function(){
+		
+		alert("you are now training for your encounter with the evil dragon");
+		
+		var pass = this.pass;
+		setTimeout(function(){
+			pass();
+		}, 5000);
+		
+	}).then(function(){
+	
+		this.pass(confirm("armor up?"));
+		
+	}).then(function(hasEquipment){
+	
+		if (hasEquipment){
+			alert("You killed the evil dragon")
+		}
+		else{
+			alert("The evil dragon killed you")
+		}
+		
+	}).then("gameOver", function(hasEquipment){
+	
+		alert("Game Over");
+		var again = window.confirm("are you ready to become the warrior of legends now?");
+		if (again){
+			this.jumpTo("training")(true);
+		}
+		
+	})
+</pre>
 
 <h3>Error Handeling</h3>
 <p>Although the general structure looks kind of like a Promise chain, there's a few key differences between this and a Promise chain. First off if a blocking error happens, nothing is going to save it from throwing the error and terminating. This means that you must handle all of your errors within the callback itself. However this also means that if you encounter an error and you would like to terminate the execution chain then you can do that within the catch part of a try-catch block</p>
