@@ -6,6 +6,7 @@
 		<script>
 			var asyncing = doAsync(function(){
 				console.log(this);
+				this.jump(3)(100);
 				this.jumpTo("spliter")(1, 2, 3);
 			}).then(function(a,b,c){
 				console.log("pass2");

@@ -1,6 +1,6 @@
 {
   "name": "do-async",
-  "version": "0.0.2",
+  "version": "0.1.0",
   "description": "Wrapper for serial ssynchronous functions",
   "main": "do-async.js",
   "scripts": {
