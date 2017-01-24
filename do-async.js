@@ -7,7 +7,19 @@
 		var executionChain = {length:0};
 		
 		// setting up a psudo push function for the array-like 
-		executionChain.addLink = function(callback, callbackName){
+		executionChain.addLink = function(callbackOrName, callbackForReal){
+			var callback, callbackName;
+			if (typeof callbackOrName === "string" || typeof callbackOrName === "undefined"){
+				callbackName = callbackOrName;
+				callback = callbackForReal;
+			}
+			else if (typeof callbackOrName === "function"){
+				callback = callbackOrName;
+			}
+			else {
+				throw "type missmatch";
+			}
+			
 			// keep a copy of the current index for the reference of the duration of the function
 			var executionIndex = executionChain.length;
 			executionChain.length += 1;
@@ -80,7 +92,19 @@
 		};
 		
 		// adding a chain link
-		chainer.then = function(step, stepName){
+		chainer.then = function(stepOrName, actualStep){
+			var step, stepName;
+			if (typeof stepOrName === "string" || typeof stepOrName === "undefined"){
+				stepName = stepOrName;
+				step = actualStep;
+			}
+			else if (typeof stepOrName === "function"){
+				step = stepOrName;
+			}
+			else {
+				throw "type missmatch";
+			}
+			
 			executionChain.addLink(step, stepName)
 			var curLinkIndex = executionChain.length - 1;
 			
@@ -113,7 +137,7 @@
 		}
 		
 		// enviroment set up add the first object to the chain.
-		chainer.then(chainStart, chainName);
+		chainer.then(chainName, chainStart);
 		
 		// if the starting function doesn't take any args, begin the chain
 		if (!chainStart.length){

@@ -10,7 +10,7 @@
 			}).then(function(a,b,c){
 				console.log("pass2");
 				this.pass(c+1, b+2, a+3);
-			}).then(function(a,b,c){
+			}).then("spliter", function(a,b,c){
 				console.log(a,b,c);
 				var pass = this.pass;
 				var context = this;
@@ -20,7 +20,7 @@
 					pass(700);
 					pass(900);
 				}, 500);
-			}, "spliter").then(function(lastTimeOut){
+			}).then(function(lastTimeOut){
 				var pass = this.pass;
 				setTimeout(function(){
 					console.log("inside first setTimeout then", lastTimeOut);
