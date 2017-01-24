@@ -194,6 +194,11 @@ doAsync(function(){
 	})
 </pre>
 
+<p>This way, if you add more segments between training and game over, you do not have to re-define where your jumps are anymore. You can also jump to indexs but that's generally less useful eg: this.jumpto(5)(args)</p>
+
+<h4>this.self()</h4>
+<p>This is for if you want to do something recursively. and calling this.self(args) is equivilant to calling this.jump(0)(args) in the above example the recursive call exists in the call to action narrative plot point assuming you decline to become the hero of legends and we can replace this.jump(0)(destroyedItems.slice(1)) with this.self(destroyedItems.slice(1))</p>
+
 <h3>Error Handeling</h3>
 <p>Although the general structure looks kind of like a Promise chain, there's a few key differences between this and a Promise chain. First off if a blocking error happens, nothing is going to save it from throwing the error and terminating. This means that you must handle all of your errors within the callback itself. However this also means that if you encounter an error and you would like to terminate the execution chain then you can do that within the catch part of a try-catch block</p>
 
