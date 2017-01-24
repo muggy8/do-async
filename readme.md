@@ -91,19 +91,15 @@ doAsync(function(){
 	
 		...
 	
-	...}).then(... 
-	
-		...
-	
 	...}).then(function(hasEquipment){
-		if (hasEquipment){alert("You killed the evil dragon")}
-		else{
+				if (hasEquipment){alert("You killed the evil dragon")}
+			}}).then(function(hasEquipment){
+		
 			alert("You have been killed by the evil dragon");
 			var again = window.confirm("are you willing to go on an adventure?");
 			if (again){
 				this.jump(-4)(true);
 			}
-		}
 	})
 </pre>
 
