@@ -118,7 +118,7 @@
 				Array.prototype.forEach.call(executionChain, function(link){
 					link.passQueue.forEach(function(forFuture){
 						//executionChain[curLinkIndex-1].applyContext.pass.apply(undefined, args);
-						if (forFuture.targetLink == curLinkIndex){
+						if (forFuture.targetLink == curLinkIndex || forFuture.targetLink == stepName){
 							executionChain[curLinkIndex-1].applyContext.pass.apply(undefined, forFuture.args)
 						}
 					})

@@ -6,7 +6,7 @@
 		<script>
 			var asyncing = doAsync(function(){
 				console.log(this);
-				this.pass(1, 2, 3);
+				this.jumpTo("spliter")(1, 2, 3);
 			}).then(function(a,b,c){
 				console.log("pass2");
 				this.pass(c+1, b+2, a+3);
@@ -49,9 +49,6 @@
 					setTimeout(function(){
 						self(sum);
 					}, 500);
-				}
-				else{
-					jumpTo("spliter")(10,15,30);
 				}
 			})
 		</script>
