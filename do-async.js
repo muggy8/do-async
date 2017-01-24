@@ -44,30 +44,7 @@
 				chainer.then = function(){};
 			}
 			
-			executionChain[executionIndex].applyContext.jump = function(target){
-				var targetLinkIndex = executionIndex + target;
-				
-				// if the target is for something that hasn't been set yet, return the function to set a value for the future
-				if (targetLinkIndex >= executionChain.length){
-					return function(){
-						var recieved = Array.prototype.slice.call(arguments);
-						executionChain[executionIndex].passQueue.push({targetLink:targetLinkIndex, args:recieved});
-					}
-				}
-				// else if target already exists, return the target link's previous function's pass function
-				else if (targetLinkIndex < executionChain.length && targetLinkIndex > 0){
-					return function(){
-						var recieved = Array.prototype.slice.call(arguments); 
-						executionChain[targetLinkIndex].exe.apply(executionChain[targetLinkIndex].applyContext, recieved);
-					}
-				}
-				// all other conditions
-				else {
-					return false;
-				}
-			}
-			
-			executionChain[executionIndex].applyContext.jumpTo = function(target){
+			executionChain[executionIndex].applyContext.jumpTo = executionChain[executionIndex].applyContext.jumpto = function(target){
 				// target is part of chain
 				if (!executionChain[target]){
 					return function(){
@@ -82,6 +59,12 @@
 						executionChain[target].exe.apply(executionChain[target].applyContext, recieved);
 					}
 				}
+			}
+			
+			executionChain[executionIndex].applyContext.jump = function(target){
+				var targetLinkIndex = executionIndex + target;
+				// piggy back off jumpto instead
+				return executionChain[executionIndex].applyContext.jumpTo(targetLinkIndex);
 			}
 			
 			executionChain[executionIndex].applyContext.self = function(){
