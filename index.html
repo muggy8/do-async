@@ -41,12 +41,12 @@
 				}, 500)
 			}).then(function(sum){
 				var pass = this.pass;
-				var jump = this.jump;
+				var self = this.self;
 				if (sum < 10000){
 					sum+= 1000;
 					console.log(sum);
 					setTimeout(function(){
-						jump(0)(sum);
+						self(sum);
 					}, 500);
 				}
 			})
