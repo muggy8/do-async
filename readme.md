@@ -260,5 +260,8 @@ You can perform parallel processes and also have them converge to continue segme
 <h3>Promise and Error Handeling</h3>
 <p>Although the general structure looks kind of like a Promise chain, there's a few key differences between doAsync and a Promise chain. First off there's only one function that you can call to add to the chain which is .then(). Second error handeling is slightly more forgiving but if you dont catch them problems will happen. On the other hand, Promise will natrually put your code into a try-catch block. doAsync is very solidly callback based and will just throw the error if the error isn't recoverable or caught. </p>
 
+<h3>Upgrading</h3>
+<p>you can directly upgrade from 0.0.X to 0.1.X without changing your code.</p>
+
 <h2>Licencing</h2>
 Free for all yay!
