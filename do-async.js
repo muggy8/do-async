@@ -10,6 +10,7 @@
 		executionChain.addLink = function(callback, callbackName){
 			// keep a copy of the current index for the reference of the duration of the function
 			var executionIndex = executionChain.length;
+			executionChain.length += 1;
 			
 			// append the callback to the list wtih some other fancy stuff
 			executionChain[executionIndex] = {exe:callback, applyContext:{}, passQueue:[]};
@@ -43,7 +44,28 @@
 				chainer.then = function(){};
 			}
 			
-			executionChain.length += 1;
+			executionChain[executionIndex].applyContext.jump = function(target){
+				var targetLinkIndex = executionIndex + target;
+				
+				// if the target is for something that hasn't been set yet, return the function to set a value for the future
+				if (targetLinkIndex >= executionChain.length){
+					return function(){
+						var recieved = Array.prototype.slice.call(arguments);
+						executionChain[executionIndex].passQueue.push({targetLink:targetLinkIndex, args:recieved});
+					}
+				}
+				// else if target already exists, return the target link's previous function's pass function
+				else if (targetLinkIndex < executionChain.length && targetLinkIndex > 0){
+					return function(){
+						var recieved = Array.prototype.slice.call(arguments); 
+						executionChain[targetLinkIndex].exe.apply(executionChain[targetLinkIndex].applyContext, recieved);
+					}
+				}
+				// all other conditions
+				else {
+					return false;
+				}
+			}
 		}
 		
 		// function to initiate the chain
@@ -65,7 +87,6 @@
 			if (curLinkIndex > 0){
 				
 				// overwrite the previous chain link's temporary pass function
-				
 				executionChain[curLinkIndex-1].applyContext.pass = function(){
 					var recieved = Array.prototype.slice.call(arguments); 
 					executionChain[curLinkIndex].exe.apply(executionChain[curLinkIndex].applyContext, recieved);
