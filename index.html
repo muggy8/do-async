@@ -5,7 +5,7 @@
 	<body>
 		<script>
 			var asyncing = doAsync(function(){
-				console.log("pass1");
+				console.log(this);
 				this.pass(1, 2, 3);
 			}).then(function(a,b,c){
 				console.log("pass2");
@@ -13,9 +13,12 @@
 			}).then(function(a,b,c){
 				console.log(a,b,c);
 				var pass = this.pass;
+				var context = this;
 				setTimeout(function(){
-					console.log("pass3");
+					console.log(context);
 					pass(500);
+					pass(700);
+					pass(900);
 				}, 500);
 			}).then(function(lastTimeOut){
 				var pass = this.pass;
