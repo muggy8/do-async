@@ -65,7 +65,7 @@ doAsync(function(){
 <p>the pass function is what tells the wrapper that your code has completed and that you are going to proceed to the next chunk of code. You can call this multiple times throughout your function and will whatever is the next callback provide by the next .then call in the chain. You can pass any number of arguements to the pass function which will get passed to the next callback in line.</p>
 
 <h4>this.end() || this.destroy()</h4>
-<p>The end or destroy function are alius for each other and will perform the same function. this is an emergency abort function which will erase the whole chain and make it so that you cannot add more function onto it with the then function.</p>
+<p>The end or destroy function are alius for each other and will perform the same function. this is an emergency abort function which will erase the whole chain and make it so that you cannot add more function onto it with the then function. in most cases, you do not need to call this function ever. </p>
 
 <h4>this.jump(numberToJump)</h4>
 <p>This function jumps by a number. You can jump forwards or backwards in the chain and lets you traverse your async chain freely. This function will return a function that you can use to call the callback block that you want. you jump forwards or backwards in the execution. You can use the jump function in a few creative ways such as:</p>
