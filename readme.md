@@ -63,7 +63,7 @@ doAsync(function(){
 <p>The .then() function takes 1 callback function and optionally one string before the callback to identify the function in the chain. it exposes to the callback's "this" property the api to interact with the chain when it calls the callback. If you are going to be calling the chain interaction api you will most likely want to set a reference to them (or the "this" object) so you can call them within your own callbacks later. you can chain these .then calls.</p>
 
 <h4>this.pass()</h4>
-<p>the pass function is what tells the wrapper that your code has completed and that you are going to proceed to the next chunk of code. You can call this multiple times throughout your function whixch will begin executing whatever is the next callback provide by the next .then call in the chain. You can pass any number of arguements to the pass function which will get passed to the next callback in line.</p>
+<p>the pass function is what tells the wrapper that your code has completed and that you are going to proceed to the next chunk of code. You can call this multiple times throughout your function which will begin executing whatever is the next callback provide by the next .then call in the chain. You can pass any number of arguements to the pass function which will get passed to the next callback in line.</p>
 
 <h4>this.end() || this.destroy()</h4>
 <p>The end or destroy function are alius for each other and will perform the same function. this is an emergency abort function which will erase the whole chain and make it so that you cannot add more function onto it with the then function. in most cases, you do not need to call this function ever. </p>
@@ -199,7 +199,7 @@ doAsync(function(){
 <p>This way, if you add more segments between training and game over, you do not have to re-define where your jumps are anymore. You can also jump to indexs but that's generally less useful eg: this.jumpto(5)(args)</p>
 
 <h4>this.self()</h4>
-<p>This is for if you want to do something recursively. and calling this.self(args) is equivilant to calling this.jump(0)(args) in the above example the recursive call exists in the call to action narrative plot point assuming you decline to become the hero of legends and we can replace this.jump(0)(destroyedItems.slice(1)) with this.self(destroyedItems.slice(1))</p>
+<p>This is for if you want to do something recursively. Calling this.self(args) is equivilant to calling this.jump(0)(args) in the above example the recursive call exists in the call to action narrative plot point (assuming you decline to become the hero of legends) and we can replace this.jump(0)(destroyedItems.slice(1)) with this.self(destroyedItems.slice(1))</p>
 
 <h3>Parallel processes</h3>
 You can perform parallel processes and also have them converge to continue segments in series such as: 
