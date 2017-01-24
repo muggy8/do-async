@@ -200,9 +200,6 @@ doAsync(function(){
 <h4>this.self()</h4>
 <p>This is for if you want to do something recursively. and calling this.self(args) is equivilant to calling this.jump(0)(args) in the above example the recursive call exists in the call to action narrative plot point assuming you decline to become the hero of legends and we can replace this.jump(0)(destroyedItems.slice(1)) with this.self(destroyedItems.slice(1))</p>
 
-<h3>Error Handeling</h3>
-<p>Although the general structure looks kind of like a Promise chain, there's a few key differences between this and a Promise chain. First off if a blocking error happens, nothing is going to save it from throwing the error and terminating. This means that you must handle all of your errors within the callback itself. However this also means that if you encounter an error and you would like to terminate the whole execution chain then you can do that within the catch part of a try-catch block</p>
-
 <h3>Parallel processes</h3>
 You can perform parallel processes and also have them converge to continue segments in series such as: 
 
@@ -258,6 +255,9 @@ You can perform parallel processes and also have them converge to continue segme
 </pre>
 
 <p>both "fetchRequestBody" and "establishDbLink" are fired at roughly the same time and once when either are done, they indiviually report back to "saveUploadToDb" with the results. because they share the same context object, what "fetchRequestBody" does to it will be felt by "establishDbLink" and vice versa. as a result the last one that provides the context will also have the most up to date version of context and when the conditions are satisfied, saveUploadToDb fires and saves the upload to the DB. We also have a global handle error in there for good measure</p>
+
+<h3>Promise and Error Handeling</h3>
+<p>Although the general structure looks kind of like a Promise chain, there's a few key differences between doAsync and a Promise chain. First off there's only one function that you can call to add to the chain which is .then(). Second error handeling is slightly more forgiving but if you dont catch them problems will happen. On the other hand, Promise will natrually put your code into a try-catch block. doAsync is very solidly callback based and will just throw the error if the error isn't recoverable or caught. </p>
 
 <h2>Licencing</h2>
 Free for all yay!
