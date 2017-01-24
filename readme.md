@@ -203,5 +203,61 @@ doAsync(function(){
 <h3>Error Handeling</h3>
 <p>Although the general structure looks kind of like a Promise chain, there's a few key differences between this and a Promise chain. First off if a blocking error happens, nothing is going to save it from throwing the error and terminating. This means that you must handle all of your errors within the callback itself. However this also means that if you encounter an error and you would like to terminate the whole execution chain then you can do that within the catch part of a try-catch block</p>
 
+<h3>Parallel processes</h3>
+You can perform parallel processes and also have them converge to continue segments in series such as: 
+
+<pre>
+	const resourceGather = doAsync("start", function(req, res, next){
+	
+		var context = {req:req, res:res, next:next};
+		this.jumpto("establishDbLink")(context);
+		this.jumpto("fetchRequestBody")(context);
+		
+	}).then("establishDbLink", function(context){
+		
+		var chain = this;
+		
+		// logic to create your link to the db should be implemented else where
+		linkToDb(credentials, function(err, link){
+			if (err){
+				chain.jumpto("catchErr")(context, err);
+			}
+			else{
+				context.dbLink = link;
+				chain.jumpto("saveUploadToDb")(context);
+			}
+		})
+		
+	}).then("fetchRequestBody", function(context){
+		
+		var chain = this;
+		
+		// logic to wait for upload to complete and save upload to upload should be implemented elsewhere
+		collectUploads(context.req, function(err, uploadedFile){
+			if (err){
+				chain.jumpto("catchErr")(context, err);
+			}
+			else{
+				context.upload = uploadedFile;
+				chain.jumpto("saveUploadToDb")(context);
+			}
+		}){}
+		
+	}).then("saveUploadToDb", function(context){
+		
+		var chain = this;
+		if (context.upload && context.dbLink){
+			//do logic to insert your upload via the dbLink and call context.next() when done. 
+		}
+		
+	}).then("catchErr", function(context. err){
+	
+		//handle it
+		
+	})
+</pre>
+
+<p>both "fetchRequestBody" and "establishDbLink" are fired at roughly the same time and once when either are done, they indiviually report back to "saveUploadToDb" with the results. because they share the same context object, what "fetchRequestBody" does to it will be felt by "establishDbLink" and vice versa. as a result the last one that provides the context will also have the most up to date version of context and when the conditions are satisfied, saveUploadToDb fires and saves the upload to the DB. We also have a global handle error in there for good measure</p>
+
 <h2>Licencing</h2>
 Free for all yay!
