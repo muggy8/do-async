@@ -33,7 +33,7 @@
 				var jump = this.jump;
 				var pass = this.pass;
 				setTimeout(function(){
-					if (sum > 5000){
+					if (sum > 2000){
 						pass (sum);
 						return;
 					}
@@ -42,12 +42,16 @@
 			}).then(function(sum){
 				var pass = this.pass;
 				var self = this.self;
+				var jumpTo = this.jumpTo;
 				if (sum < 10000){
 					sum+= 1000;
 					console.log(sum);
 					setTimeout(function(){
 						self(sum);
 					}, 500);
+				}
+				else{
+					jumpTo("spliter")(10,15,30);
 				}
 			})
 		</script>

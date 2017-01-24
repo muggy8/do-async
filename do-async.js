@@ -67,6 +67,23 @@
 				}
 			}
 			
+			executionChain[executionIndex].applyContext.jumpTo = function(target){
+				// target is part of chain
+				if (!executionChain[target]){
+					return function(){
+						var recieved = Array.prototype.slice.call(arguments); 
+						executionChain[executionIndex].passQueue.push({targetLink:target, args:recieved});
+					}
+				}
+				// target is not part of the chain
+				else{
+					return function (){
+						var recieved = Array.prototype.slice.call(arguments); 
+						executionChain[target].exe.apply(executionChain[target].applyContext, recieved);
+					}
+				}
+			}
+			
 			executionChain[executionIndex].applyContext.self = function(){
 				var recieved = Array.prototype.slice.call(arguments); 
 				executionChain[executionIndex].applyContext.jump(0).apply(executionChain[executionIndex].applyContext, recieved);
