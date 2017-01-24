@@ -76,10 +76,6 @@
 		// function to initiate the chain
 		var chainer = function(){
 			var recieved = Array.prototype.slice.call(arguments);
-			var instanceGlobals = {};
-			Array.prototype.forEach.call(executionChain, function(link){
-				link.applyContext.globals = instanceGlobals;
-			})
 			executionChain[0].exe.apply(executionChain[0].applyContext, recieved);
 		};
 		
