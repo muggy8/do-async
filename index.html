@@ -31,9 +31,24 @@
 			}).then(function(sum){
 				console.log(sum);
 				var jump = this.jump;
+				var pass = this.pass;
 				setTimeout(function(){
+					if (sum > 5000){
+						pass (sum);
+						return;
+					}
 					jump(-1)(sum)
 				}, 500)
+			}).then(function(sum){
+				var pass = this.pass;
+				var jump = this.jump;
+				if (sum < 10000){
+					sum+= 1000;
+					console.log(sum);
+					setTimeout(function(){
+						jump(0)(sum);
+					}, 500);
+				}
 			})
 		</script>
 	</body>

@@ -66,6 +66,11 @@
 					return false;
 				}
 			}
+			
+			executionChain[executionIndex].applyContext.self = function(){
+				var recieved = Array.prototype.slice.call(arguments); 
+				executionChain[executionIndex].applyContext.jump(0).apply(executionChain[executionIndex].applyContext, recieved);
+			}
 		}
 		
 		// function to initiate the chain
