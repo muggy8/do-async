@@ -1,6 +1,7 @@
 "use strict";
 (function(context){
-	
+	var arrayForeach = Array.prototype.forEach;
+	var arraySlice = Array.prototype.slice;
 	context["doAsync"] = function(chainStartOrName, actualChain){
 		var chainStart, chainName;
 		if (typeof chainStartOrName === "string"){
@@ -40,14 +41,14 @@
 			executionChain[executionIndex] = {exe:callback, applyContext:{}, passQueue:[]};
 			
 			// if a name exists, put a reference to the callback to the name as well
-			console.log(callbackName);
+			//console.log(callbackName);
 			if (callbackName){
 				executionChain[callbackName] = executionChain[executionIndex];
 			}
 			
 			// temporary pass function to put the data into a queue (to be overwritten later)
 			var tempPass = executionChain[executionIndex].applyContext.pass = function(){
-				var recieved = Array.prototype.slice.call(arguments);
+				var recieved = arraySlice.call(arguments);
 				
 				// if new pass has not been assigned, add to pasqueue (support for synchronous functions)
 				if(executionChain[executionIndex].applyContext.pass == tempPass){
@@ -61,7 +62,7 @@
 			
 			// function that ends the execution chain
 			executionChain[executionIndex].applyContext.end = executionChain[executionIndex].applyContext.destroy = function(){
-				Array.prototype.forEach.call(executionChain, function(link){
+				arrayForeach.call(executionChain, function(link){
 					link.exe = function(){};
 					link.applyContext = {};
 					link.passQueue = [];
@@ -73,14 +74,14 @@
 				// target is part of chain
 				if (!executionChain[target]){
 					return function(){
-						var recieved = Array.prototype.slice.call(arguments); 
+						var recieved = arraySlice.call(arguments); 
 						executionChain[executionIndex].passQueue.push({targetLink:target, args:recieved});
 					}
 				}
 				// target is not part of the chain
 				else{
 					return function (){
-						var recieved = Array.prototype.slice.call(arguments); 
+						var recieved = arraySlice.call(arguments); 
 						executionChain[target].exe.apply(executionChain[target].applyContext, recieved);
 					}
 				}
@@ -93,14 +94,14 @@
 			}
 			
 			executionChain[executionIndex].applyContext.self = function(){
-				var recieved = Array.prototype.slice.call(arguments); 
+				var recieved = arraySlice.call(arguments); 
 				executionChain[executionIndex].applyContext.jump(0).apply(executionChain[executionIndex].applyContext, recieved);
 			}
 		}
 		
 		// function to initiate the chain
 		var chainer = function(){
-			var recieved = Array.prototype.slice.call(arguments);
+			var recieved = arraySlice.call(arguments);
 			executionChain[0].exe.apply(executionChain[0].applyContext, recieved);
 		};
 		
@@ -126,12 +127,12 @@
 				
 				// overwrite the previous chain link's temporary pass function
 				executionChain[curLinkIndex-1].applyContext.pass = function(){
-					var recieved = Array.prototype.slice.call(arguments); 
+					var recieved = arraySlice.call(arguments); 
 					executionChain[curLinkIndex].exe.apply(executionChain[curLinkIndex].applyContext, recieved);
 				}
 				
 				// go through the previous links and call all the pass functions that's targeting the current link
-				Array.prototype.forEach.call(executionChain, function(link){
+				arrayForeach.call(executionChain, function(link){
 					link.passQueue.forEach(function(forFuture){
 						//executionChain[curLinkIndex-1].applyContext.pass.apply(undefined, args);
 						if (forFuture.targetLink == curLinkIndex || forFuture.targetLink == stepName){
