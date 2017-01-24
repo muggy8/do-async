@@ -44,7 +44,7 @@ doAsync(function(){
 });
 </pre>
 
-<h3>doAsync(callback [, linkName])</h3>
+<h3>doAsync([linkName, ] callback)</h3>
 <p>This is the function that you use to initiate the process. It takes 1 callback and optionally one name identifyer. If the callback take no arguements, the function will automatically start the process. If you save the returned value with a variable eg: </p>
 <pre>
 	var findIfLibUpdated = doAsync(function(req, res, next){
