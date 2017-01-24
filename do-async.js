@@ -7,7 +7,7 @@
 		var executionChain = {length:0};
 		
 		// setting up a psudo push function for the array-like 
-		executionChain.push = function(callback, callbackName){
+		executionChain.addLink = function(callback, callbackName){
 			// keep a copy of the current index for the reference of the duration of the function
 			var executionIndex = executionChain.length;
 			
@@ -25,7 +25,7 @@
 				
 				// if new pass has not been assigned, add to pasqueue (support for synchronous functions)
 				if(executionChain[executionIndex].applyContext.pass == tempPass){
-					executionChain[executionIndex].passQueue.push(recieved);
+					executionChain[executionIndex].passQueue.push({targetLink:executionIndex+1, args:recieved});
 				}
 				// use new pass (support for async functions)
 				else {
@@ -36,10 +36,14 @@
 			// function that ends the execution chain
 			executionChain[executionIndex].applyContext.end = executionChain[executionIndex].applyContext.destroy = function(){
 				Array.prototype.forEach.call(executionChain, function(link){
-					link.exe = {exe:functon(){}, applyContext:{}, passQueue:[]}
+					link.exe = function(){};
+					link.applyContext = {};
+					link.passQueue = [];
 				})
 				chainer.then = function(){};
 			}
+			
+			executionChain.length += 1;
 		}
 		
 		// function to initiate the chain
@@ -54,7 +58,7 @@
 		
 		// adding a chain link
 		chainer.then = function(step, stepName){
-			executionChain.push(step, stepName)
+			executionChain.addLink(step, stepName)
 			var curLinkIndex = executionChain.length - 1;
 			
 			// if this isn't the first time then is called
@@ -67,10 +71,16 @@
 					executionChain[curLinkIndex].exe.apply(executionChain[curLinkIndex].applyContext, recieved);
 				}
 				
-				// if the previous chain link has some passes queued up call them now
-				executionChain[curLinkIndex-1].passQueue.forEach(function(args){
-					executionChain[curLinkIndex-1].applyContext.pass.apply(undefined, args);
+				// go through the previous links and call all the pass functions that's targeting the current link
+				Array.prototype.forEach.call(executionChain, function(link){
+					link.passQueue.forEach(function(forFuture){
+						//executionChain[curLinkIndex-1].applyContext.pass.apply(undefined, args);
+						if (forFuture.targetLink == curLinkIndex){
+							executionChain[curLinkIndex-1].applyContext.pass.apply(undefined, forFuture.args)
+						}
+					})
 				})
+				
 			}
 			return chainer;
 		}
