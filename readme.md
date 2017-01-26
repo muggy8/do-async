@@ -260,6 +260,83 @@ You can perform parallel processes and also have them converge to continue segme
 <h3>Promise and Error Handeling</h3>
 <p>Although the general structure looks kind of like a Promise chain, there's a few key differences between doAsync and a Promise chain. First off there's only one function that you can call to add to the chain which is .then(). Second error handeling is slightly more forgiving but if you dont catch them problems will happen. On the other hand, Promise will natrually put your code into a try-catch block. doAsync is very solidly callback based and will just throw the error if the error isn't recoverable or caught. </p>
 
+<h3>Why?</h3>
+
+<p>This project is a mix of too bored and rebelious to find and use common solutions to asynchronous code writing wanting to do something for fun and learn a bunch along the way. The initial problem is how do we write asynchronous code that works and doesn't become hard to read later on. Lets say we have a problem like this:</p> 
+
+<p>user clicks on button -> app AJAX calls server to get data about the clicked button -> app then populates a dropdown with info based on data</p>
+
+<pre>
+	$("#interaction-button").on("click", function(ev){
+		$.ajax({
+			url:"https://mysite.com/api/button_data/",
+			method:"POST",
+			data:{"button", ev.target.name}
+		}).done(function(data){
+			// do stuff with data
+		})
+	})
+</pre>
+
+<p>Looks pretty straitforwards right? well lets immagine what happens when you want this to happen not just for the button in question but every button in the dropdown (eg navigation of a file system). then you would need to break the callback out and instead of having a nested thing you have something like this</p>
+
+<pre>
+	var populateSubTree = function(ev){
+		$.ajax({
+			url:"https://mysite.com/api/button_data/",
+			method:"POST",
+			data:{"button", ev.target.name}
+		}).done(function(data){
+			// do stuff with data
+		})
+	}
+	
+	$(".tree-nodes").on("click", populateSubTree);
+</pre>
+
+<p>looks still pretty simple right? well here's the problem, we need to declare the callback first then the action that invokes the callback. what happens if we have a really long chain of callbacks? we might end up in one of a few situations...</p>
+
+<pre>
+	var stepN = function(vars){
+		// async logic ...
+	}
+	
+	...
+	
+	var step3 = function(vars){
+		// provides step 4 to async logic.s callback...
+	}
+	
+	var step2 = function(vars){
+		// provides step 3 to async logic.s callback...
+	}
+	
+	var step1 = function(vars){
+		// provides step 2 to async logic's callback...
+	}
+	
+	// some logic to initiate step 1
+</pre>
+
+<p>or</p>
+
+<pre>
+	doSomethingAsync(settings, function(results1){
+		// do some logic 
+		doSomeOtherAsyncThing(otherSettings, function(results2){
+			// do some logic 
+			doAnotherAsyncThing(anotherSettings, function(results3){
+				// do some logic 
+				doYetAnotherAsyncThing(yetAnotherSettings, function(results4){
+					...
+				})
+			})
+		})
+	})
+</pre>
+
+<p>As you can see this is kind of rediculous.</p>
+
 <h3>Upgrading</h3>
 <p>you can directly upgrade from 0.0.X to 0.1.X without changing your code.</p>
 
