@@ -262,6 +262,8 @@ You can perform parallel processes and also have them converge to continue segme
 
 <h3>Why?</h3>
 
+<p>"You shouldn't use a library because you can't write the code to do what it does but because you dont want to" - some brilliant person on the inernet</p>
+
 <p>This project is a mix of too bored and rebelious to find and use common solutions to asynchronous code writing wanting to do something for fun and learn a bunch along the way. The initial problem is how do we write asynchronous code that works and doesn't become hard to read later on. Lets say we have a problem like this:</p> 
 
 <p>user clicks on button -> app AJAX calls server to get data about the clicked button -> app then populates a dropdown with info based on data</p>
@@ -335,7 +337,36 @@ You can perform parallel processes and also have them converge to continue segme
 	})
 </pre>
 
-<p>As you can see this is kind of rediculous.</p>
+<p>As you can see this is kind of rediculous... especially when you go revisit your code 2 months down the line trying to see how to fix that one random bug that shows up in a very spicific place.</p>
+
+<small>Yes I know about Hoisting. No I dont think ok to use it since I feel it leads to more confusion.</small>
+
+<p>This then leads to promises</p>
+
+<pre>
+	new Promise(function(accept, reject){
+		// set up settings and stuff
+		doSomeAsyncStuff(settings, function(err, success){
+			if (!err) accept(success)
+		})
+	}).then(function(data){
+		return new Promise(accept, reject){
+			// set up settings and stuff
+			doSomeAsyncStuff(settings, function(err, success){
+				if (!err) accept(success)
+			})
+		};
+	}).then(function(data){
+		return new Promise(accept, reject){
+			// set up settings and stuff
+			doSomeAsyncStuff(settings, function(err, success){
+				if (!err) accept(success)
+			})
+		};
+	})...
+</pre>
+
+<p>Now that looks pretty nice right? Well here's the problem. Promise chains are very hard to interupt and I have yet to see any way of terminating a promise chain part way through. Which is actually the main reason I decided to embark on this project. Now I can declare my actions the right way around and not only that, I can mix synchronous and asynchronous code wherever I feel like. The best part, It's small enough that it only really does one thing and you can incorprate it into your project without much of a sweat.</p>
 
 <h3>Upgrading</h3>
 <p>you can directly upgrade from 0.0.X to 0.1.X without changing your code.</p>
