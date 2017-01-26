@@ -262,7 +262,7 @@ You can perform parallel processes and also have them converge to continue segme
 
 <h3>Why?</h3>
 
-<p>"You shouldn't use a library because you can't write the code to do what it does but because you dont want to" - some brilliant person on the inernet</p>
+<p>"You shouldn't use a library because you can't write the code to do what it. Instead you should use it because dont want write that code" - some brilliant person on the inernet</p>
 
 <p>This project is a mix of too bored and rebelious to find and use common solutions to asynchronous code writing wanting to do something for fun and learn a bunch along the way. The initial problem is how do we write asynchronous code that works and doesn't become hard to read later on. Lets say we have a problem like this:</p> 
 
