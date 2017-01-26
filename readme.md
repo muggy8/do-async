@@ -260,7 +260,7 @@ You can perform parallel processes and also have them converge to continue segme
 <h3>Promise and Error Handeling</h3>
 <p>Although the general structure looks kind of like a Promise chain, there's a few key differences between doAsync and a Promise chain. First off there's only one function that you can call to add to the chain which is .then(). Second error handeling is slightly more forgiving but if you dont catch them problems will happen. On the other hand, Promise will natrually put your code into a try-catch block. doAsync is very solidly callback based and will just throw the error if the error isn't recoverable or caught. </p>
 
-<h3>Why?</h3>
+<h2>Why?</h2>
 
 <p>"You shouldn't use a library because you can't write the code to do what it. Instead you should use it because dont want write that code" - some brilliant person on the inernet</p>
 
@@ -368,7 +368,7 @@ You can perform parallel processes and also have them converge to continue segme
 
 <p>Now that looks pretty nice right? Well here's the problem. Promise chains are very hard to interupt and I have yet to see any way of terminating a promise chain part way through. Which is actually the main reason I decided to embark on this project. Now I can declare my actions the right way around and not only that, I can mix synchronous and asynchronous code wherever I feel like. The best part, It's small enough that it only really does one thing and you can incorprate it into your project without much of a sweat.</p>
 
-<h3>Upgrading</h3>
+<h2>Upgrading</h2>
 <p>you can directly upgrade from 0.0.X to 0.1.X without changing your code.</p>
 
 <h2>Licencing</h2>
