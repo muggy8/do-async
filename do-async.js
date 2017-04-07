@@ -47,12 +47,12 @@
 			}
 
 			// temporary pass function to put the data into a queue (to be overwritten later)
-			executionChain[executionIndex].applyContext.pass = function(){
+			var tempPass = executionChain[executionIndex].applyContext.pass = function(){
 				var recieved = arraySlice.call(arguments);
 
-				executionChain[executionIndex].applyContext.jump(1)(arguments);
-				/*
-				// if new pass has not been assigned, add to pasqueue (support for synchronous functions)
+				executionChain[executionIndex].applyContext.jump(1).apply(undefined, recieved);
+                /*
+                // if new pass has not been assigned, add to pasqueue (support for synchronous functions)
 				if(executionChain[executionIndex].applyContext.pass == tempPass){
 					executionChain[executionIndex].passQueue.push({targetLink:executionIndex+1, args:recieved});
 				}
@@ -60,7 +60,7 @@
 				else {
 					executionChain[executionIndex].applyContext.pass.apply(undefined, recieved);
 				}
-				*/
+                */
 			}
 
 			// function that ends the execution chain
@@ -75,15 +75,15 @@
 
 			executionChain[executionIndex].applyContext.jumpTo = executionChain[executionIndex].applyContext.jumpto = function(target){
 				// target is part of chain
-				return function(){
-					var recieved = arraySlice.call(arguments);
-					if (!executionChain[target]) {
-						executionChain[executionIndex].passQueue.push({targetLink:target, args:recieved});
-					}
-					else {
-						executionChain[target].exe.apply(executionChain[target].applyContext, recieved);
-					}
-				}
+                return function(){
+                    var recieved = arraySlice.call(arguments);
+                    if (!executionChain[target]) {
+                        executionChain[executionIndex].passQueue.push({targetLink:target, args:recieved});
+                    }
+                    else {
+                        executionChain[target].exe.apply(executionChain[target].applyContext, recieved);
+                    }
+                }
 			}
 
 			executionChain[executionIndex].applyContext.jump = function(target){
@@ -125,10 +125,10 @@
 			if (curLinkIndex > 0){
 
 				// overwrite the previous chain link's temporary pass function
-				executionChain[curLinkIndex-1].applyContext.pass = function(){
+				/*executionChain[curLinkIndex-1].applyContext.pass = function(){
 					var recieved = arraySlice.call(arguments);
 					executionChain[curLinkIndex].exe.apply(executionChain[curLinkIndex].applyContext, recieved);
-				}
+				}*/
 
 				// go through the previous links and call all the pass functions that's targeting the current link
 				arrayForeach.call(executionChain, function(link){
