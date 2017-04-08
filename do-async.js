@@ -27,23 +27,23 @@
 			executionChain.length += 1;
 
 			// append the callback to the list with some other fancy stuff
-			executionChain[executionIndex] = {exe:callback, applyContext:{}, passQueue:[]};
+			var currentLink = executionChain[executionIndex] = {exe:callback, applyContext:{}, passQueue:[]};
 
 			// if a name exists, put a reference to the callback to the name as well
 			//console.log(callbackName);
 			if (callbackName){
-				executionChain[callbackName] = executionChain[executionIndex];
+				executionChain[callbackName] = currentLink;
 			}
 
 			// temporary pass function to put the data into a queue (to be overwritten later)
-			executionChain[executionIndex].applyContext.pass = function(){
+			currentLink.applyContext.pass = function(){
 				var recieved = arraySlice.call(arguments);
 
-				executionChain[executionIndex].applyContext.jump(1).apply(undefined, recieved);
+				currentLink.applyContext.jump(1).apply(currentLink.applyContext, recieved);
 			}
 
 			// function that ends the execution chain
-			executionChain[executionIndex].applyContext.end = executionChain[executionIndex].applyContext.destroy = function(){
+			currentLink.applyContext.end = currentLink.applyContext.destroy = function(){
 				arrayForeach.call(executionChain, function(link){
 					link.exe = function(){};
 					link.applyContext = {};
@@ -52,12 +52,13 @@
 				chainer.then = function(){};
 			}
 
-			executionChain[executionIndex].applyContext.jumpTo = executionChain[executionIndex].applyContext.jumpto = function(target){
+			currentLink.applyContext.jumpTo = currentLink.applyContext.jumpto = function(target){
 				// target is part of chain
                 return function(){
                     var recieved = arraySlice.call(arguments);
+					// if target has not been initialized yet
                     if (!executionChain[target]) {
-                        executionChain[executionIndex].passQueue.push({targetLink:target, args:recieved});
+                        currentLink.passQueue.push({targetLink:target, args:recieved});
                     }
                     else {
                         executionChain[target].exe.apply(executionChain[target].applyContext, recieved);
@@ -65,15 +66,15 @@
                 }
 			}
 
-			executionChain[executionIndex].applyContext.jump = function(target){
+			currentLink.applyContext.jump = function(target){
 				var targetLinkIndex = executionIndex + target;
 				// piggy back off jumpto instead
-				return executionChain[executionIndex].applyContext.jumpTo(targetLinkIndex);
+				return currentLink.applyContext.jumpTo(targetLinkIndex);
 			}
 
-			executionChain[executionIndex].applyContext.self = function(){
+			currentLink.applyContext.self = function(){
 				var recieved = arraySlice.call(arguments);
-				executionChain[executionIndex].applyContext.jump(0).apply(executionChain[executionIndex].applyContext, recieved);
+				currentLink.applyContext.jump(0).apply(currentLink.applyContext, recieved);
 			}
 		}
 
