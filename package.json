@@ -1,8 +1,8 @@
 {
   "name": "do-async",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Wrapper for serial/parallel asynchronous functions",
-  "main": "do-async.js",
+  "main": "do-async.min.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
